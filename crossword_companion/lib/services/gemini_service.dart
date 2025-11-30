@@ -98,13 +98,13 @@ You have a tool to get grammatical information about a word.
 - This tool is most helpful as a verification step after you have a likely answer.
 - Consider using this tool when a clue contains a grammatical hint that could be ambiguous.
 - **Good candidates for verification:**
-    - Clues that seem to be verbs (e.g., "To run," "Waving").
-    - Clues that are adverbs (e.g., "Happily," "Quickly").
-    - Clues that specify a plural form.
+- Clues that seem to be verbs (e.g., "To run," "Waving").
+- Clues that are adverbs (e.g., "Happily," "Quickly").
+- Clues that specify a plural form.
 - **Try to avoid using the tool for:**
-    - Simple definitions (e.g., "A small dog").
-    - Fill-in-the-blank clues (e.g., "___ and flow").
-    - Proper nouns (e.g., "Capital of France").
+- Simple definitions (e.g., "A small dog").
+- Fill-in-the-blank clues (e.g., "___ and flow").
+- Proper nouns (e.g., "Capital of France").
 
 **Function signature:**
 ```json
@@ -117,7 +117,7 @@ You have a tool to return the final result of the clue solving process.
 
 **When to use:**
 - Use this tool when you have a final answer and confidence score to return. You
-  must use this tool exactly once, and only once, to return the final result.
+must use this tool exactly once, and only once, to return the final result.
 
 **Function signature:**
 ```json
@@ -186,7 +186,7 @@ representing the grid size, contents, and clues. The images may contain
 different parts of the same puzzle (e.g., the grid the across clues, the down
 clues). Combine them to form a complete puzzle.
 The JSON schema is as follows: ${jsonEncode(_crosswordSchema.toJson())}
-          '''),
+      '''),
         ...imageParts,
       ]),
     ];
@@ -292,9 +292,6 @@ The JSON schema is as follows: ${jsonEncode(_crosswordSchema.toJson())}
   }
 
   String getSolverPrompt(Clue clue, int length, String pattern) =>
-      buildSolverPrompt(clue, length, pattern);
-
-  String buildSolverPrompt(Clue clue, int length, String pattern) =>
       '''
 Your task is to solve the following crossword clue.
 
