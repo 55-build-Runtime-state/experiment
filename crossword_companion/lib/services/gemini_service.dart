@@ -11,6 +11,7 @@ import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 import '../models/clue.dart';
 import '../models/clue_answer.dart';
@@ -209,7 +210,8 @@ ${jsonEncode(_resolveConflictFunction.toJson())}
     final imageParts = <Part>[];
     for (final image in images) {
       final imageBytes = await image.readAsBytes();
-      imageParts.add(InlineDataPart('image/jpeg', imageBytes));
+      final mimeType = lookupMimeType(image.path, headerBytes: imageBytes)!;
+      imageParts.add(InlineDataPart(mimeType, imageBytes));
     }
 
     final content = [
