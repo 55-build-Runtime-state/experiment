@@ -51,5 +51,4 @@ ephemeral/
 #firebase
 google-services.json
 GoogleService-Info.plist
-firebase.json
 .firebaserc
