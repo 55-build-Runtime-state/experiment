@@ -52,12 +52,32 @@ class GeminiModels {
       ),
       defaultPrompt: 'Hey Gemini! Can you set the app color to purple?',
     ),
-    'gemini-2.5-flash-image-preview': GeminiModel(
-      name: 'gemini-2.5-flash-image-preview',
+    'gemini-2.5-flash-image': GeminiModel(
+      name: 'gemini-2.5-flash-image',
       description:
           'Our standard Flash model upgraded for rapid creative workflows with image generation and conversational, multi-turn editing capabilities.',
       model: FirebaseAI.googleAI().generativeModel(
-        model: 'gemini-2.5-flash-image-preview',
+        model: 'gemini-2.5-flash-image',
+        generationConfig: GenerationConfig(
+          responseModalities: [
+            ResponseModalities.text,
+            ResponseModalities.image,
+          ],
+        ),
+      ),
+      defaultPrompt:
+          'Hot air balloons rising over the San Francisco Bay at golden hour '
+          'with a view of the Golden Gate Bridge. Make it anime style.',
+    ),
+    'gemini-3-pro-image-preview': GeminiModel(
+      name: 'gemini-3-pro-image-preview',
+      description:
+          'Gemini 3 Pro Image (aka nano banana pro). Designed for professional '
+          'asset production and complex instructions. It features real-world '
+          'grounding using Google Search, a default "Thinking" process that '
+          'refines composition prior to generation, and can generate images of up to 4K resolution.',
+      model: FirebaseAI.googleAI().generativeModel(
+        model: 'gemini-3-pro-image-preview',
         generationConfig: GenerationConfig(
           responseModalities: [
             ResponseModalities.text,
