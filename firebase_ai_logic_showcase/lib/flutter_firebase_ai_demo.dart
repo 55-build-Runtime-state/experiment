@@ -27,27 +27,28 @@ class DemoHomeScreen extends StatefulWidget {
 
 class _DemoHomeScreenState extends State<DemoHomeScreen> {
   int _selectedIndex = 0;
-  final List<({Widget icon, String label, Widget? selectedIcon})> destinations =
-      [
-        (icon: const Icon(Icons.chat), label: 'Chat', selectedIcon: null),
+  final List<({Widget icon, String label, Widget? selectedIcon})>
+  destinations = [
+    (icon: const Icon(Icons.chat), label: 'Chat', selectedIcon: null),
+    /* TODO: This demo should remain inactive until Appcheck is enforced by default @cynthiajoan
         (
           icon: const Icon(Icons.video_chat),
           label: 'Live API',
           selectedIcon: null,
-        ),
-        (
-          icon: const Icon(Icons.photo_library),
-          label: 'Multimodal',
-          selectedIcon: null,
-        ),
-        (
-          icon: RichText(
-            text: const TextSpan(style: TextStyle(fontSize: 24.0), text: '🍌'),
-          ),
-          label: 'Nano Banana',
-          selectedIcon: null,
-        ),
-      ];
+        ),*/
+    (
+      icon: const Icon(Icons.photo_library),
+      label: 'Multimodal',
+      selectedIcon: null,
+    ),
+    (
+      icon: RichText(
+        text: const TextSpan(style: TextStyle(fontSize: 24.0), text: '🍌'),
+      ),
+      label: 'Nano Banana',
+      selectedIcon: null,
+    ),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -122,7 +123,7 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
 
 final List<Widget> demoPages = <Widget>[
   const ChatDemo(),
-  LiveAPIDemo(),
+  // TODO: This demo should remain inactive until Appcheck is enforced by default @cynthiajoan LiveAPIDemo(),
   const MultimodalDemo(),
   ChatDemoNano(),
 ];
