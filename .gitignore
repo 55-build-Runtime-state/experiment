@@ -86,3 +86,7 @@ yarn.lock
 /graalvm_test_native_interop/build
 crossword_companion/firebase.json
 crossword_companion/lib/firebase_options.dart
+native_interop_demos/ios_calendar_demo/lib/eventkit_bindings.dart
+native_interop_demos/ios_calendar_demo/ios/Runner/eventkit_wrapper.m
+native_interop_demos/ios_calendar_demo/ios/Runner/eventkit_wrapper.swift
+/native_interop_demos/ios_calendar_demo/temp
