@@ -1,39 +1,29 @@
 import 'dart:io';
 
-import 'package:ffigen/ffigen.dart' as fg;
-import 'package:logging/logging.dart';
-import 'package:pub_semver/pub_semver.dart';
-import 'package:swift2objc/swift2objc.dart' as swift2objc;
-import 'package:swiftgen/swiftgen.dart';
+import 'package:ffigen/ffigen.dart';
 
-Future<void> main() async {
-  final logger = Logger('swiftgen');
-  logger.onRecord.listen((record) {
-    stderr.writeln('${record.level.name}: ${record.message}');
-  });
-
-  await SwiftGenerator(
-    target: Target(
-      triple: 'x86_64-apple-macosx14.0',
-      sdk: Uri.directory(
-        '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk',
-      ),
+void main() {
+  print('Generating EventKit bindings directly from Objective-C headers...');
+  final generator = FfiGenerator(
+    headers: Headers(
+      entryPoints: [
+        Uri.file(
+          '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKit.framework/Headers/EventKit.h',
+        ),
+      ],
     ),
-    inputs: const [SwiftModuleInput(module: 'EventKit')],
-    include: (swift2objc.Declaration d) {
-      if (d.name == 'birthdayPersonUniqueID') return false;
-      // Also exclude anything deprecated we might run into
-      return d.name == 'EKEventStore' ||
-          d.name == 'EKEvent' ||
-          d.name == 'EKCalendar';
-    },
+    objectiveC: ObjectiveC(
+      interfaces: Interfaces.includeSet({
+        'EKEventStore',
+        'EKEvent',
+        'EKCalendar',
+        'EKCalendarItem',
+        'EKObject',
+      }),
+    ),
+    enums: Enums.includeSet({'EKEntityType'}),
     output: Output(
-      swiftWrapperFile: SwiftWrapperFile(
-        path: Uri.file('ios/Runner/eventkit_wrapper.swift'),
-      ),
-      module: 'EventKitWrapper',
       dartFile: Uri.file('lib/eventkit_bindings.dart'),
-      objectiveCFile: Uri.file('ios/Runner/eventkit_wrapper.m'),
       preamble: '''
 // Copyright (c) 2025, the Dart project authors. Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
@@ -43,40 +33,16 @@ Future<void> main() async {
 // coverage:ignore-file
 ''',
     ),
-    ffigen: FfiGeneratorOptions(
-      objectiveC: fg.ObjectiveC(
-        externalVersions: fg.ExternalVersions(
-          ios: fg.Versions(min: Version(14, 0, 0)),
-        ),
-        interfaces: fg.Interfaces(
-          include: (decl) =>
-              decl.originalName == 'EKEventStoreWrapper' ||
-              decl.originalName == 'EKEventWrapper' ||
-              decl.originalName == 'EKCalendarWrapper',
-        ),
-      ),
-    ),
-  ).generate(logger: logger, tempDirectory: Uri.directory('temp'));
-
-  print(
-    'Code generation complete. Stripping unavailable iOS properties from Swift wrapper...',
   );
 
+  generator.generate();
+
+  // Clean up old swiftgen wrapper files since they are no longer needed
   final swiftFile = File('ios/Runner/eventkit_wrapper.swift');
-  if (swiftFile.existsSync()) {
-    var content = swiftFile.readAsStringSync();
+  if (swiftFile.existsSync()) swiftFile.deleteSync();
 
-    // Remove birthdayPersonUniqueID
-    content = content.replaceAll(
-      RegExp(
-        r'\s*@objc public var birthdayPersonUniqueID: String\? \{[\s\S]*?\}\s*\}',
-      ),
-      '',
-    );
-
-    swiftFile.writeAsStringSync(content);
-    print('Stripped birthdayPersonUniqueID successfully.');
-  }
+  final objcFileOld = File('ios/Runner/eventkit_wrapper.m');
+  if (objcFileOld.existsSync()) objcFileOld.deleteSync();
 
   print('Done.');
 }
