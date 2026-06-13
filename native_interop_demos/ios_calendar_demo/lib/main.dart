@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:objective_c/objective_c.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'create_event_dialog.dart';
 import 'eventkit_bindings.dart';
 
 void main() {
@@ -57,19 +58,15 @@ class _CalendarHomePageState extends State<CalendarHomePage> {
         .request();
   }
 
-  void _createEvent() {
-    setState(() {});
-  }
-
   void _retrieveEvents() {
     final startDate = NSDate.date();
     final endDate = NSDate.dateWithTimeIntervalSinceNow(30.0 * 24 * 60 * 60);
 
     final calendars = _eventStore.calendars;
-    debugPrint(calendars.toString());
     final predicate = _eventStore.predicateForEventsWithStartDate(
       startDate,
       endDate: endDate,
+      calendars: calendars,
     );
 
     final NSArray eventsArray = _eventStore.eventsMatchingPredicate(predicate);
@@ -79,7 +76,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> {
     for (int i = 0; i < count; i++) {
       final obj = eventsArray.objectAtIndex(i);
       final event = EKEvent.as(obj);
-      debugPrint(event.title.toDartString());
       fetchedEvents.add(event);
     }
 
@@ -105,7 +101,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Calendar Permission Demo')),
+      appBar: AppBar(title: const Text('EventKit Native Interop Demo')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -121,7 +117,15 @@ class _CalendarHomePageState extends State<CalendarHomePage> {
             ),
             const Divider(height: 32),
             ElevatedButton(
-              onPressed: _hasCalendarPermission ? _createEvent : null,
+              onPressed: _hasCalendarPermission
+                  ? () => showDialog(
+                      context: context,
+                      builder: (context) => CreateEventDialog(
+                        eventStore: _eventStore,
+                        onEventCreated: _retrieveEvents,
+                      ),
+                    )
+                  : null,
               child: const Text('Create Event'),
             ),
             const SizedBox(height: 8),
