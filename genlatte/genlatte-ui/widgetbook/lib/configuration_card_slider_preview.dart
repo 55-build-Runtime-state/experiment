@@ -1,3 +1,7 @@
+// Copyright 2014 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:genlatte_data/models.dart' show ZeroToOneQuestion;
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;

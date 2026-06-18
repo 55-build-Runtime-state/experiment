@@ -1,3 +1,7 @@
+// Copyright 2014 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:cloud_firestore/cloud_firestore.dart' hide Filter;
 import 'package:data_layer/data_layer.dart' hide Source;
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
